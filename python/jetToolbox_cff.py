@@ -128,7 +128,6 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 					rParam = jetSize, 
 					jetAlgorithm = algorithm ) ) 
 		jetSeq += getattr(proc, jetalgo+'GenJetsNoNu' )
-		#fixedGridRhoFastjetAll.pfCandidatesTag = 'packedPFCandidates'
 
 		#for Inclusive Vertex Finder
 		proc.load('PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi')
@@ -160,8 +159,11 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 			'pfJetBProbabilityBJetTags',
 			'pfSimpleSecondaryVertexHighEffBJetTags',
 			'pfSimpleSecondaryVertexHighPurBJetTags',
+			'pfCombinedSecondaryVertexV2BJetTags',
 			'pfCombinedSecondaryVertexBJetTags',
-			'pfCombinedInclusiveSecondaryVertexV2BJetTags'
+			'pfCombinedInclusiveSecondaryVertexV2BJetTags',
+			#'pfCombinedSecondaryVertexSoftLeptonBJetTags',
+			#'pfCombinedMVABJetTags'
 	    ]
 
 	####  Creating PATjets
@@ -229,13 +231,14 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 			genJetCollection = cms.InputTag( jetalgo+'GenJetsNoNu'),
 			pvSource = cms.InputTag( pvLabel ), #'offlineSlimmedPrimaryVertices'),
 			btagDiscriminators = bTagDiscriminators,
+			getJetMCFlavour = False,
 			outputModules = ['outputFile']
 			) 
 
 	getattr( proc, 'patJetCorrFactors'+jetALGO+'PF'+PUMethod ).primaryVertices = pvLabel  #'offlineSlimmedPrimaryVertices' 
 	#getattr( proc, 'jetTracksAssociatorAtVertex'+jetALGO+'PF'+PUMethod ).tracks = tvLabel  # 'unpackedTracksAndVertices'
 
-	getattr(proc,'patJetPartons').particles = cms.InputTag( genParticlesLabel ) #'prunedGenParticles')
+	#getattr(proc,'patJetPartons').particles = cms.InputTag( genParticlesLabel ) #'prunedGenParticles')
 	getattr(proc,'patJetPartonMatch'+jetALGO+'PF'+PUMethod).matched = cms.InputTag( genParticlesLabel ) #'prunedGenParticles')
 	if hasattr(proc,'pfInclusiveSecondaryVertexFinderTagInfos'+jetALGO+'PF'+PUMethod):
 		    getattr(proc,'pfInclusiveSecondaryVertexFinderTagInfos'+jetALGO+'PF'+PUMethod).extSVCollection = cms.InputTag( svLabel ) #'slimmedSecondaryVertices')
@@ -315,7 +318,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 					svSource = cms.InputTag( svLabel ),   #'slimmedSecondaryVertices'),
 					btagDiscriminators = bTagDiscriminators,
 					genJetCollection = cms.InputTag( jetalgo+'GenJetsNoNuSoftDrop','SubJets'),
-					#getJetMCFlavour = False,
+					getJetMCFlavour = False,
 					explicitJTA = True,  # needed for subjet b tagging
 					svClustering = True, # needed for subjet b tagging
 					fatJets=cms.InputTag(jetalgo+'PFJets'+PUMethod),             # needed for subjet flavor clustering
@@ -404,7 +407,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 					svSource = cms.InputTag( svLabel ),   #'slimmedSecondaryVertices'),
 					btagDiscriminators = bTagDiscriminators,
 					genJetCollection = cms.InputTag( jetalgo+'GenJetsNoNuPruned','SubJets'),
-					#getJetMCFlavour = False,
+					getJetMCFlavour = False,
 					explicitJTA = True,  # needed for subjet b tagging
 					svClustering = True, # needed for subjet b tagging
 					fatJets=cms.InputTag(jetalgo+'PFJets'+PUMethod),             # needed for subjet flavor clustering
