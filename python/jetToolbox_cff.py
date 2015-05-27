@@ -35,7 +35,8 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 		addMassDrop=False,
 		addHEPTopTagger=False,
 		addNsub=False, maxTau=4, 
-		addQJets=False 
+		addQJets=False,
+		addPUJetID=False
 		):
 	
 	###############################################################################
@@ -642,39 +643,42 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 
 	###### QJetsAdder
 	if addQJets:
-		'''
-		#This is the old way before 731
-		### there must be a better way to do this random number introduction
-		setattr( proc, 'RandomNumberGeneratorService', cms.Service("RandomNumberGeneratorService", 
-							QJetsAdderCA8 = cms.PSet(initialSeed = cms.untracked.uint32(7)),
-							QJetsAdderAK8 = cms.PSet(initialSeed = cms.untracked.uint32(31)),
-							QJetsAdderCA15 = cms.PSet(initialSeed = cms.untracked.uint32(76)), ) )
-
-		from RecoJets.JetProducers.qjetsadder_cfi import QJetsAdder
-		setattr( proc, 'QJetsAdder'+jetALGO, 
-				QJetsAdder.clone( src = cms.InputTag(jetalgo+'PFJets'+PUMethod), 
-					jetRad = cms.double( jetSize ), 
-					jetAlgo = cms.string( jetALGO[0:2] )))
-		elemToKeep += [ 'keep *_QJetsAdder'+jetALGO+'_*_*' ]
-		getattr( proc, 'patJets'+jetALGO+'PF'+PUMethod).userData.userFloats.src += ['QJetsAdder'+jetALGO+':QjetsVolatility']  
-		jetSeq += getattr(proc, 'QJetsAdder'+jetALGO )
-		toolsUsed.append( 'QJetsAdder'+jetALGO )
-		'''
-		### This is for 731 or higher
 		if 'ak4' in jetalgo:
 			proc.load('RecoJets.JetProducers.QGTagger_cfi')
 			proc.QGTagger.srcJets = cms.InputTag(jetalgo+'PFJets'+PUMethod)    # Could be reco::PFJetCollection or pat::JetCollection (both AOD and miniAOD)
 			proc.QGTagger.jetsLabel = cms.string('QGL_AK4PFchs')        # Other options (might need to add an ESSource for it): see https://twiki.cern.ch/twiki/bin/viewauth/CMS/QGDataBaseVersion
+			proc.QGTagger.srcVertexCollection = cms.InputTag(pvLabel) 
 			elemToKeep += [ 'keep *_QGTagger_*_*' ]
+			elemToKeep += [ 'keep *_QJetsAdderAK4_*_*' ]
 			getattr( proc, 'patJets'+jetALGO+'PF'+PUMethod).userData.userFloats.src += ['QJetsAdder'+jetALGO+':qgLikelihood']  
 			jetSeq += getattr(proc, 'QGTagger' )
+			toolsUsed.append( 'QJetsAdder'+jetALGO )
 		else:
 			'QGTagger is optimized for ak4 jets.'
+
+	####### Pileup JetID
+	if addPUJetID:
+		if 'ak4' in jetalgo:
+			proc.load('RecoJets.JetProducers.pileupjetidproducer_cfi')
+			proc.pileupJetIdCalculator.jets = cms.InputTag(jetalgo+'PFJets'+PUMethod)
+			proc.pileupJetIdEvaluator.jets = cms.InputTag(jetalgo+'PFJets'+PUMethod)
+			proc.pileupJetIdCalculator.rho = cms.InputTag("fixedGridRhoFastjetAll")
+			proc.pileupJetIdEvaluator.rho = cms.InputTag("fixedGridRhoFastjetAll")
+			proc.pileupJetIdCalculator.vertexes = cms.InputTag(pvLabel)
+			proc.pileupJetIdEvaluator.vertexes = cms.InputTag(pvLabel)
+
+			getattr( proc, 'patJets'+jetALGO+'PF'+PUMethod).userData.userFloats.src += ['pileupJetIdEvaluator:fullDiscriminant']
+			getattr( proc, 'patJets'+jetALGO+'PF'+PUMethod).userData.userInts.src += ['pileupJetIdEvaluator:cutbasedId','pileupJetIdEvaluator:fullId']
+			elemToKeep += ['keep *_pileupJetIdEvaluator_*_*']
+			toolsUsed.append( 'pileupJetIdEvaluator' )
+		else:
+			'PUJetID is optimized for ak4 jets.'
 
 	setattr( proc, 'selectedPatJets'+jetALGO+'PF'+PUMethod, selectedPatJets.clone( src = 'patJets'+jetALGO+'PF'+PUMethod, cut = Cut ) )
 	elemToKeep += [ 'keep *_selectedPatJets'+jetALGO+'PF'+PUMethod+'_*_*' ]
 	elemToKeep += [ 'drop *_selectedPatJets'+jetALGO+'PF'+PUMethod+'_calo*_*' ]
 	elemToKeep += [ 'drop *_selectedPatJets'+jetALGO+'PF'+PUMethod+'_tagInfos_*' ]
+	toolsUsed.append( 'selectedPatJets'+jetALGO+'PF'+PUMethod )
 
 	print '|---- jetToolBox: Running '+', '.join(toolsUsed)+'.'
 
