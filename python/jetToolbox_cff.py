@@ -268,7 +268,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 
 		setattr( proc, jetalgo+'PFJets'+PUMethod+'SoftDrop', 
 			ak8PFJetsCHSSoftDrop.clone( 
-				src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents' ),
+				src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents', 'constituents' ),
 				rParam = jetSize, 
 				jetAlgorithm = algorithm, 
 				useExplicitGhosts=True,
@@ -367,7 +367,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 
 		setattr( proc, jetalgo+'PFJets'+PUMethod+'Pruned', 
 			ak8PFJetsCHSPruned.clone( 
-				src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents' ),
+				src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents', 'constituents' ),
 				rParam = jetSize, 
 				jetAlgorithm = algorithm, 
 				zcut=zCut, 
@@ -460,7 +460,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 		setattr( proc, jetalgo+'PFJets'+PUMethod+'Trimmed', 
 				ak8PFJetsCHSTrimmed.clone( 
 					rParam = jetSize, 
-					src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents'),
+					src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents', 'constituents'),
 					jetAlgorithm = algorithm,
 					rFilt= rFiltTrim,
 					trimPtFracMin= ptFrac) ) 
@@ -479,7 +479,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 
 		setattr( proc, jetalgo+'PFJets'+PUMethod+'Filtered', 
 				ak8PFJetsCHSFiltered.clone( 
-					src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents' ),
+					src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents', 'constituents' ),
 					rParam = jetSize, 
 					jetAlgorithm = algorithm,
 					rFilt= rfilt,
@@ -501,7 +501,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 			setattr( proc, 'cmsTopTagPFJets'+PUMethod,  
 					cms.EDProducer("CATopJetProducer",
 						PFJetParameters.clone( 
-							src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents' ),
+							src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents', 'constituents' ),
 							doAreaFastjet = cms.bool(True),
 							doRhoFastjet = cms.bool(False),
 							jetPtMin = cms.double(100.0)
@@ -605,7 +605,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 			setattr( proc, jetalgo+'PFJets'+PUMethod+'MassDropFiltered', 
 					ca15PFJetsCHSMassDropFiltered.clone( 
 						rParam = jetSize,
-						src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents' ),
+						src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents', 'constituents' ),
 						) )
 			setattr( proc, jetalgo+'PFJets'+PUMethod+'MassDropFilteredMass', ak8PFJetsCHSPrunedMass.clone( src = cms.InputTag( jetalgo+'PFJets'+PUMethod), 
 				matched = cms.InputTag(jetalgo+'PFJets'+PUMethod+'MassDropFiltered'), distMax = cms.double( jetSize ) ) )
@@ -619,7 +619,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 	if addHEPTopTagger: 
 		if ( jetSize >= 1. ) and ( 'CA' in jetALGO ): 
 
-			setattr( proc, 'hepTopTagPFJets'+PUMethod, hepTopTagPFJetsCHS.clone( src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents' ) ) )
+			setattr( proc, 'hepTopTagPFJets'+PUMethod, hepTopTagPFJetsCHS.clone( src = cms.InputTag( jetalgo+'PFJets'+PUMethod+'Constituents', 'constituents' ) ) )
 			setattr( proc, 'hepTopTagPFJets'+PUMethod+'Mass'+jetALGO, ak8PFJetsCHSPrunedMass.clone( src = cms.InputTag( jetalgo+'PFJets'+PUMethod), 
 				matched = cms.InputTag("hepTopTagPFJets"+PUMethod), distMax = cms.double( jetSize ) ) )
 			elemToKeep += [ 'keep *_hepTopTagPFJets'+PUMethod+'Mass'+jetALGO+'_*_*' ]
