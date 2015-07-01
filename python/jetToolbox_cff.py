@@ -141,7 +141,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 			'pfSimpleSecondaryVertexHighPurBJetTags',
 			'pfCombinedSecondaryVertexV2BJetTags',
 			'pfCombinedSecondaryVertexBJetTags',
-			#'pfcombinedInclusiveSecondaryVertexV2BJetTags',
+			'pfcombinedInclusiveSecondaryVertexV2BJetTags',
 			#'pfCombinedSecondaryVertexSoftLeptonBJetTags',
 			#'pfCombinedMVABJetTags'
 	    ]
@@ -333,12 +333,12 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 					algo = jetalgo,  # needed for subjet b tagging
 					rParam = jetSize,  # needed for subjet b tagging
 					jetCorrections = subJEC if subJEC is not None else None, 
-					pfCandidates = cms.InputTag( pfCand ), 
-					pvSource = cms.InputTag( pvLabel), 
-					svSource = cms.InputTag( svLabel ),  
+					#pfCandidates = cms.InputTag( pfCand ), 
+					#pvSource = cms.InputTag( pvLabel), 
+					#svSource = cms.InputTag( svLabel ),  
 					btagDiscriminators = bTagDiscriminators,
 					genJetCollection = cms.InputTag( jetalgo+'GenJetsNoNuSoftDrop','SubJets'),
-					getJetMCFlavour = GetSubjetMCFlavour,
+					#getJetMCFlavour = GetSubjetMCFlavour,
 					explicitJTA = True,  # needed for subjet b tagging
 					svClustering = True, # needed for subjet b tagging
 					fatJets=cms.InputTag(jetalgo+'PFJets'+PUMethod),             # needed for subjet flavor clustering
