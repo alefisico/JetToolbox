@@ -139,11 +139,8 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 			'pfJetBProbabilityBJetTags',
 			'pfSimpleSecondaryVertexHighEffBJetTags',
 			'pfSimpleSecondaryVertexHighPurBJetTags',
-			'pfCombinedSecondaryVertexV2BJetTags',
 			'pfCombinedSecondaryVertexBJetTags',
-			'pfcombinedInclusiveSecondaryVertexV2BJetTags',
-			#'pfCombinedSecondaryVertexSoftLeptonBJetTags',
-			#'pfCombinedMVABJetTags'
+			'pfCombinedInclusiveSecondaryVertexV2BJetTags'
 	    ]
 
 	### Jet Corrections
