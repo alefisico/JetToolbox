@@ -122,7 +122,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 		pvLabel = 'offlinePrimaryVertices'
 		tvLabel = 'generalTracks'
 		pfCand = 'particleFlow'
-		svLabel = 'inclusiveSecondaryVertices'
+		svLabel = 'inclusiveCandidateSecondaryVertices'
 
 		proc.load('RecoJets.Configuration.GenJetParticles_cff')
 		proc.load('CommonTools.ParticleFlow.pfNoPileUpJME_cff')
