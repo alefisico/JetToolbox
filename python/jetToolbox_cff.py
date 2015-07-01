@@ -315,7 +315,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 					jetCorrections = JEC if JEC is not None else None, 
 					btagDiscriminators = ['None'],
 					genJetCollection = cms.InputTag( jetalgo+'GenJetsNoNu'),
-					getJetMCFlavour = GetJetMCFlavour,
+					getJetMCFlavour = False, # jet flavor should always be disabled for groomed jets
 					outputModules = ['outputFile']
 					) 
 
@@ -407,7 +407,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 					jetCorrections = JEC if JEC is not None else None, 
 					btagDiscriminators = ['None'],
 					genJetCollection = cms.InputTag( jetalgo+'GenJetsNoNu'),
-					getJetMCFlavour = GetJetMCFlavour,
+					getJetMCFlavour = False, # jet flavor should always be disabled for groomed jets
 					outputModules = ['outputFile']
 					) 
 			if JEC is not None: getattr( proc, 'patJetCorrFactors'+jetALGO+'PF'+PUMethod+'Pruned' ).primaryVertices = pvLabel  
@@ -549,7 +549,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 					svSource = cms.InputTag( svLabel ), 
 					btagDiscriminators = bTagDiscriminators,
 					genJetCollection = cms.InputTag(jetalgo+'GenJetsNoNu'),
-					getJetMCFlavour = GetJetMCFlavour
+					getJetMCFlavour = False, # jet flavor should always be disabled for groomed jets
 					)
 			getattr(proc,'patJetPartonMatchCMSTopTag'+PUMethod).matched = cms.InputTag( genParticlesLabel ) 
 			if hasattr(proc,'pfInclusiveSecondaryVertexFinderTagInfosCMSTopTag'+PUMethod):
