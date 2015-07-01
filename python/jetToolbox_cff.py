@@ -323,7 +323,7 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 					algo = jetalgo,  # needed for subjet b tagging
 					rParam = jetSize,  # needed for subjet b tagging
 					jetCorrections = subJEC if subJEC is not None else None, 
-					#pfCandidates = cms.InputTag( pfCand ), 
+					pfCandidates = cms.InputTag( pfCand ), 
 					pvSource = cms.InputTag( pvLabel), 
 					svSource = cms.InputTag( svLabel ),  
 					btagDiscriminators = bTagDiscriminators,
