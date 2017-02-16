@@ -61,7 +61,7 @@ process.out.outputCommands.extend([
 
 process.endpath = cms.EndPath(process.out)
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1)) #1000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
 	    #'file:store_mc_RunIISummer16MiniAODv2_GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_MINIAODSIM_PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1_120000_0010CF3F-1EB7-E611-A46F-00266CFFA678.root'
