@@ -203,10 +203,12 @@ def jetToolbox( proc, jetType, jetSequence, outputFile,
 						puppi.useExistingWeights = cms.bool(True)
 						print '|---- jetToolBox: Puppi default value. It takes the existing weights from miniAOD.'
 					else:
-						PUMethod = 'Puppi'
+						setattr( proc, 'newpuppi', puppi.clone( 
+							useExistingWeights = cms.bool(False)
+							))
 						print '|---- jetToolBox: It will calculate the weights from scratch. (It is NOT taking the existing weights from miniAOD.)'
-				jetSeq += getattr(proc, 'puppi' )
-				srcForPFJets = 'puppi'
+				jetSeq += getattr(proc, ( 'puppi' if PUMethod == 'Puppi' else 'newpuppi' ) )
+				srcForPFJets = ( 'puppi' if PUMethod == 'Puppi' else 'newpuppi' )
 
 			from RecoJets.JetProducers.ak4PFJetsPuppi_cfi import ak4PFJetsPuppi
 			setattr( proc, jetalgo+'PFJetsPuppi'+postFix, 
